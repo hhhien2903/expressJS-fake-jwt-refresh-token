@@ -4,12 +4,17 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const config = require('./config');
 const utils = require('./utils');
-const tokenList = {};
+var tokenList = {};
 const app = express();
 const cors = require('cors');
 
 router.get('/', (req, res) => {
   res.send('Ok');
+});
+
+router.get('/clear-all-refresh-token', (req, res) => {
+  tokenList = {};
+  res.send('cleared token list');
 });
 
 /**
@@ -138,7 +143,12 @@ router.use(TokenCheckMiddleware);
 
 router.get('/profile', (req, res) => {
   // all secured routes goes here
-  res.json(req.decoded);
+  const userData = {
+    email: 'admin@admin.com',
+    name: 'admin',
+    picture: 'https://randomuser.me/api/portraits/men/75.jpg',
+  };
+  res.json(userData);
 });
 
 app.use(cors());
